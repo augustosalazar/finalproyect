@@ -31,12 +31,24 @@ class _HomePageState extends State<HomePage> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    adminController.start();
+  }
+
+  @override
+  Future<void> dispose() async {
+    super.dispose();
+    await adminController.stop();
+  }
+
+  @override
   Widget build(BuildContext context) {
     adminController.getUserNameByEmail(authenticationController.userEmail());
 
     logout() async {
       try {
-        adminController.stop();
+        await adminController.stop();
         await authenticationController.logout();
       } catch (e) {
         logError(e);
@@ -139,7 +151,6 @@ class _HomePageState extends State<HomePage> {
         animationCurve: Curves.ease,
         animationDuration: const Duration(milliseconds: 600),
         onTap: (index) {
-          
           if (index == 0) {}
           setState(() {
             _page = index;
